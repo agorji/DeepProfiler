@@ -110,16 +110,16 @@ def print_progress (iteration, total, prefix="Progress", suffix="Complete", deci
         sys.stdout.write("\rError: print_progress() function received multiple negative values.")
         sys.stdout.flush()
     elif iteration < 0:
-        sys.stdout.write("\rError: print_progress() function received a negative "iteration" value.")
+        sys.stdout.write("\rError: print_progress() function received a negative " % iteration % " value.")
         sys.stdout.flush()
     elif total < 0:
-        sys.stdout.write("\rError: print_progress() function received a negative "total" value.")
+        sys.stdout.write("\rError: print_progress() function received a negative " % total % " value.")
         sys.stdout.flush()
     elif barLength < 0:
-        sys.stdout.write("\rError: print_progress() function received a negative "barLength" value.")
+        sys.stdout.write("\rError: print_progress() function received a negative " % barLength % " value.")
         sys.stdout.flush()
     elif iteration > total:
-        sys.stdout.write("\rError: print_progress() function received an "iteration" value greater than the "total" value.")
+        sys.stdout.write("\rError: print_progress() function received an " % iteration % " value greater than the " % total % " value.")
         sys.stdout.flush()
 
 def write_locations(field, query_template, plate_name, row, conn, config):
@@ -127,7 +127,7 @@ def write_locations(field, query_template, plate_name, row, conn, config):
     query = query_template.replace("@@@",field).format(
             plate_name,
             row["Metadata_Well"],
-            row["Metadata_Site"]
+            plate_name + "_" + row["Metadata_Well"] + "_" + row["Metadata_Site"]
     )
     locations = pd.read_sql_query(query, conn)
 
@@ -160,12 +160,12 @@ def create_cell_indices(args):
 
     # Define query template: @@@ is either Cells or Nuclei
     query_template = "SELECT @@@_Location_Center_X, @@@_Location_Center_Y " +\
-                     " FROM @@@ INNER JOIN Image " +\
-                     "    ON Image.ImageNumber = @@@.ImageNumber " +\
-                     "    AND Image.TableNumber = @@@.TableNumber " +\
-                     " WHERE Image.Image_Metadata_Plate = '{}' " +\
-                     "    AND Image.Image_Metadata_Well = '{}' " +\
-                     "    AND Image.Image_Metadata_Site = '{}' " +\
+                     " FROM supplement_Object INNER JOIN supplement_Image " +\
+                     "    ON supplement_Image.ImageNumber = supplement_Object.ImageNumber " +\
+                     "    AND supplement_Image.TableNumber = supplement_Object.TableNumber " +\
+                     " WHERE supplement_Image.Image_Metadata_Plate_DAPI = '{}' " +\
+                     "    AND supplement_Image.Image_Metadata_Well_DAPI = '{}' " +\
+                     "    AND supplement_Image.Image_FileName_DAPI LIKE '{}%' " +\
                      "    AND @@@_Location_Center_X NOT LIKE 'NaN' " +\
                      "    AND @@@_Location_Center_Y NOT LIKE 'NaN' "
 
