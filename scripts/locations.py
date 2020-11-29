@@ -127,7 +127,7 @@ def write_locations(field, query_template, plate_name, row, conn, config):
     query = query_template.replace("@@@",field).format(
             plate_name,
             row["Metadata_Well"],
-            plate_name + "_" + row["Metadata_Well"] + "_" + row["Metadata_Site"]
+            row["Metadata_Site"]
     )
     locations = pd.read_sql_query(query, conn)
 
@@ -165,7 +165,7 @@ def create_cell_indices(args):
                      "    AND supplement_Image.TableNumber = supplement_Object.TableNumber " +\
                      " WHERE supplement_Image.Image_Metadata_Plate_DAPI = '{}' " +\
                      "    AND supplement_Image.Image_Metadata_Well_DAPI = '{}' " +\
-                     "    AND supplement_Image.Image_FileName_DAPI LIKE '{}%' " +\
+                     "    AND supplement_Image.Image_FileName_DAPI LIKE '%_{}_%' " +\
                      "    AND @@@_Location_Center_X NOT LIKE 'NaN' " +\
                      "    AND @@@_Location_Center_Y NOT LIKE 'NaN' "
 
