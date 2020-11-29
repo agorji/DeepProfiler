@@ -131,23 +131,24 @@ def write_locations(field, query_template, plate_name, row, conn, config):
     )
     locations = pd.read_sql_query(query, conn)
 
-    # Keep center coordinates only, remove NaNs, and transform to integers
-    locations = locations.dropna(axis=0, how="any")
-    locations[field+"_Location_Center_X"] = locations[field+"_Location_Center_X"]*config["compression"]["scaling_factor"]
-    locations[field+"_Location_Center_Y"] = locations[field+"_Location_Center_Y"]*config["compression"]["scaling_factor"]
-    locations[field+"_Location_Center_X"] = locations[field+"_Location_Center_X"].astype(int)
-    locations[field+"_Location_Center_Y"] = locations[field+"_Location_Center_Y"].astype(int)
+    if not locations.empty:
+        # Keep center coordinates only, remove NaNs, and transform to integers
+        locations = locations.dropna(axis=0, how="any")
+        locations[field+"_Location_Center_X"] = locations[field+"_Location_Center_X"]*config["compression"]["scaling_factor"]
+        locations[field+"_Location_Center_Y"] = locations[field+"_Location_Center_Y"]*config["compression"]["scaling_factor"]
+        locations[field+"_Location_Center_X"] = locations[field+"_Location_Center_X"].astype(int)
+        locations[field+"_Location_Center_Y"] = locations[field+"_Location_Center_Y"].astype(int)
 
-    # Save the resulting dataset frame in the output directory
-    loc_file = "{}/{}/locations/{}-{}-{}.csv".format(
-        config["compression"]["output_dir"],
-        row["Metadata_Plate"],
-        row["Metadata_Well"],
-        row["Metadata_Site"],
-        field
-    )
-    check_path(loc_file)
-    locations.to_csv(loc_file, index=False)
+        # Save the resulting dataset frame in the output directory
+        loc_file = "{}/{}/locations/{}-{}-{}.csv".format(
+            config["compression"]["output_dir"],
+            row["Metadata_Plate"],
+            row["Metadata_Well"],
+            row["Metadata_Site"],
+            field
+        )
+        check_path(loc_file)
+        locations.to_csv(loc_file, index=False)
 
 
 def create_cell_indices(args):
