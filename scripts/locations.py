@@ -155,7 +155,7 @@ def create_cell_indices(args):
  
     # Open database
     plate_name = plate.data.iloc[0]["Metadata_Plate"]
-    database_file = "{}/{}/{}.sqlite".format(config["original_images"]["backend"], plate_name, plate_name)
+    database_file = config["original_images"]["backend"]
     conn = sqlite3.connect(database_file)
 
     # Define query template: @@@ is either Cells or Nuclei
