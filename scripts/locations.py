@@ -140,7 +140,7 @@ def write_locations(field, query_template, plate_name, row, conn, config):
         locations[field+"_Location_Center_Y"] = locations[field+"_Location_Center_Y"].astype(int)
 
         # Save the resulting dataset frame in the output directory
-        loc_file = "{}/{}/locations/{}-{}-{}.csv".format(
+        loc_file = "{}/{}/{}-{}.csv".format(
             config["compression"]["output_dir"],
             row["Metadata_Plate"],
             row["Metadata_Well"],
