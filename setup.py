@@ -30,7 +30,7 @@ setuptools.setup(
         "scipy>=1.1",
         "efficientnet>=1.0.0"
         "comet-ml>=3.1.6",
-#        "tensorflow-gpu==1.12.2"
+       "tensorflow-gpu==1.15"
     ],
     extras_require={
         "test": [
